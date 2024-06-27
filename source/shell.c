@@ -1,6 +1,59 @@
 // Include the shell header file for necessary constants and function declarations
 #include "shell.h"
 
+// Helper function to figure out how many builtin commands are supported by the shell
+int num_builtin_functions()
+{
+  return sizeof(builtin_commands) / sizeof(char *);
+};
+
+int shell_cd(char **args)
+{
+  char cwd[1024];
+  if (args[1] == NULL)
+  {
+    fprintf(stderr, "shell: expected argument to \"cd\"\n");
+    return 1;
+  }
+  else
+  {
+    if (chdir(args[1]) != 0)
+    {
+      perror("shell");
+    }
+  }
+  printf("current:%s\n", getcwd(cwd, sizeof(cwd)));
+  return 1;
+}
+int shell_help(char **args)
+{
+  for (int i = 0; i < num_builtin_functions(); i++)
+  {
+    printf("%s\n", builtin_commands[i]);
+  }
+  return 1;
+}
+int shell_exit(char **args)
+{
+  return 0;
+}
+int shell_usage(char **args)
+{
+  return 1;
+}
+int list_env(char **args)
+{
+  return 1;
+}
+int set_env_var(char **args)
+{
+  return 1;
+}
+int unset_env_var(char **args)
+{
+  return 1;
+}
+
 // Function to read a command from the user input
 void read_command(char **cmd)
 {
@@ -79,42 +132,99 @@ int main(void)
   // Define an array to hold the command and its arguments
   char *cmd[MAX_ARGS];
   int child_status;
-  pid_t pid;
-
-  type_prompt();     // Display the prompt
-  read_command(cmd); // Read a command from the user
-
-  // If the command is "exit", break out of the loop to terminate the shell
-  if (strcmp(cmd[0], "exit") == 0)
-    // break;
-    return 0;
-
   // Formulate the full path of the command to be executed
   char full_path[PATH_MAX];
   char cwd[1024];
-  if (getcwd(cwd, sizeof(cwd)) != NULL)
+  pid_t pid;
+
+  while (1)
   {
+    type_prompt();     // Display the prompt
+    read_command(cmd); // Read a command from the user
 
-    snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
+    // skips execution if the command is empty
+    if (cmd[0] == NULL)
+      continue;
+
+    int builtin = 0;
+    // Loop through our command list and check if the commands exist in the builtin command list
+    for (int command_index = 0; command_index < num_builtin_functions(); command_index++)
+    {
+      if (strcmp(cmd[0], builtin_commands[command_index]) == 0) // Assume args[0] contains the first word of the command
+      {
+        builtin = 1;
+        // We will create new process to run the function with the specific command except for builtin commands.
+        // These have to be done by the shell process.
+        if ((*builtin_command_func[command_index])(cmd))
+        {
+          continue;
+        }
+        else
+        {
+          return 0;
+        }
+        break;
+      }
+    }
+
+    if (builtin)
+      continue;
+
+    printf("current:%s\n", getcwd(cwd, sizeof(cwd)));
+
+    pid = fork();
+
+    if (pid < 0)
+    {
+      fprintf(stderr, "Fork has failed. Exiting now");
+      return 1;
+    }
+    else if (pid == 0)
+    {
+      if (getcwd(cwd, sizeof(cwd)) != NULL)
+      {
+        snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
+        printf("full path: %s\n", full_path);
+        execvp(full_path, cmd);
+        // if (execv(full_path, cmd) == -1)
+        // {
+        //   printf("%d", execv(full_path, cmd));
+        //   execvp(full_path, cmd);
+        // }
+
+        // If execv returns, command execution has failed
+        printf("Command %s not found\n", cmd[0]);
+        exit(0);
+      }
+      else
+      {
+        printf("Failed to get current working directory.");
+        exit(1);
+      }
+    }
+    else
+    {
+      waitpid(pid, &child_status, WUNTRACED);
+
+      if (WIFEXITED(child_status))
+      {
+        int child_exit_status = WEXITSTATUS(child_status);
+      }
+      else
+      {
+        // If execv returns, command execution has failed
+        printf("Command %s not found\n", cmd[0]);
+        exit(0);
+      }
+    }
+
+    // Free the allocated memory for the command arguments before exiting
+    for (int i = 0; cmd[i] != NULL; i++)
+    {
+      free(cmd[i]);
+      cmd[i] = NULL; // reset each pointer to NULL after freeing
+    }
+    memset(cwd, '\0', sizeof(cwd)); // clear the cwd array
   }
-  else
-  {
-    printf("Failed to get current working directory.");
-    exit(1);
-  }
-
-  execv(full_path, cmd);
-
-  // If execv returns, command execution has failed
-  printf("Command %s not found\n", cmd[0]);
-  exit(0);
-
-  // Free the allocated memory for the command arguments before exiting
-  for (int i = 0; cmd[i] != NULL; i++)
-  {
-    free(cmd[i]);
-  }
-  memset(cwd, '\0', sizeof(cwd)); // clear the cwd array
-
   return 0;
 }
