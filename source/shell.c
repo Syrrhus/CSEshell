@@ -126,9 +126,48 @@ void type_prompt()
   printf("$$ ");  // Print the shell prompt
 }
 
+void process_rc_file() {
+    printf("Entering process_rc_file\n"); // Debug print
+    FILE *file = fopen(".cseshellrc", "r");
+    if (file == NULL) {
+        perror("Failed to open .cseshellrc");
+        return;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        // Remove newline character
+        line[strcspn(line, "\n")] = 0;
+
+        printf("Processing line: %s\n", line); // Debug print
+
+        if (strncmp(line, "PATH=", 5) == 0) {
+            // Set PATH environment variable
+            if (putenv(line) != 0) {
+                perror("Failed to set PATH");
+            }
+        } else {
+            // Execute command
+            if (fork() == 0) {
+                // Child process
+                char *args[] = {"/bin/sh", "-c", line, NULL};
+                execvp(args[0], args);
+                perror("Failed to execute command");
+                _exit(EXIT_FAILURE);
+            } else {
+                // Parent process
+                wait(NULL);
+            }
+        }
+    }
+
+    fclose(file);
+}
+
 // The main function where the shell's execution begins
 int main(void)
 {
+  process_rc_file();
   // Define an array to hold the command and its arguments
   char *cmd[MAX_ARGS];
   int child_status;
