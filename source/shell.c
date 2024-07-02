@@ -179,6 +179,7 @@ void type_prompt()
 {
   // Use a static variable to check if this is the first call to the function
   static int first_time = 0;
+  char cwd[1024];
   if (first_time)
   {
     // Clear the screen on the first call

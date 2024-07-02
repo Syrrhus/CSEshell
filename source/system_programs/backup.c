@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <sys/stat.h>
+
+int directory_exists(const char *path) {
+    struct stat stats;
+    stat(path, &stats);
+    return S_ISDIR(stats.st_mode);
+}
 
 void main() {
     char *backupDir = getenv("BACKUP_DIR");
@@ -9,8 +16,12 @@ void main() {
         printf("Error: BACKUP_DIR environment variable is not set.\n");
         return;
     }
+    if (!directory_exists(backupDir)) {
+        fprintf(stderr, "Error: Backup directory does not exist at '%s'.\n", backupDir);
+        return;
+    }
 
-    char *projectDir = "/usr/bin";
+    char *projectDir = "/home/shojunxi/programming-assignment-1-2024-anyhow";
     if (!projectDir) {
         printf("Error: PROJECT_DIR environment variable is not set.\n");
         return;
