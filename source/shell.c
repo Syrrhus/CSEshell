@@ -1,6 +1,10 @@
 // Include the shell header file for necessary constants and function declarations
 #include "shell.h"
+#include <unistd.h>
 
+// Declaration of the external variable 'environ'
+// environ is actually defined in the C standard library
+extern char **environ;
 // Helper function to figure out how many builtin commands are supported by the shell
 int num_builtin_functions()
 {
@@ -37,14 +41,56 @@ int shell_exit(char **args)
 {
   return 0;
 }
+
+void print_description(const char *function){
+    //create for loop to input correct desc based on command input
+    int found=0; //add this as a flag to see if command is found
+    for (int i=0; i<num_builtin_functions();i++){
+        if (strcmp(function, builtin_commands[i]) == 0){
+            printf("%s\n", builtin_desc[i]);
+            found=1;
+            break;
+        }
+    }
+    //return error if not found
+    if (!found) {
+        printf("The command you gave %s is not part of CSEShell's builtin command\n", function);
+    }
+}
+
 int shell_usage(char **args)
 {
-  return 1;
+    //if usage is entered
+    //i need to change this aft rc file is added
+    if (strcmp(args[0], "usage") == 0) {
+        //missing args[1] -> print how to use usage
+        if (args[1] == NULL) {
+            printf("Usage: usage <command>\n");
+            return 1; //return failure
+        }
+        else{
+            char *function = args[1];
+            //call print function
+            print_description(function);
+            return 0; //return success
+        }
+    }
 }
+
 int list_env(char **args)
 {
-  return 1;
+   if (strcmp(args[0], "env") == 0) {
+        char **env = environ; // Pointer to the array of environment strings
+        
+        while (*env) { // Loop until NULL pointer is encountered
+            printf("%s\n", *env); // Print the current environment variable
+            env++; // Move to the next environment variable
+        }
+        
+        return 0;
+   }
 }
+
 int set_env_var(char **args)
 {
   return 1;

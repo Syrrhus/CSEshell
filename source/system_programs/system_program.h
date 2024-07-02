@@ -34,3 +34,23 @@
 #define COLOR_MAGENTA "\x1b[35m"
 #define COLOR_CYAN "\x1b[36m"
 #define COLOR_RESET "\x1b[0m"
+
+const char *builtin_desc[] = {
+    "cd directory_name to change working directory of the shell",
+    "help for supported commands",
+    "exit to terminate the shell gracefully",
+    "usage cd/help/exit",
+    "env to list all registered env variables",
+    "set env ENV=VALUE to set a new env variable",
+    "unsetenv ENV to remove this env from the list of env variables",
+};
+
+const char *builtin_commands[] = {
+    "cd",      // Changes the current directory of the shell to the specified path. If no path is given, it defaults to the user's home directory.
+    "help",    //  List all builtin commands in the shell
+    "exit",    // Exits the shell
+    "usage",   // Provides a brief usage guide for the shell and its built-in command
+    "env",     // Lists all the environment variables currently set in the shell
+    "setenv",  // Sets or modifies an environment variable for this shell session
+    "unsetenv" // Removes an environment variable from the shell
+};

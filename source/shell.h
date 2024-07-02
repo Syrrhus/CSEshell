@@ -37,3 +37,13 @@ int (*builtin_command_func[])(char **) = {
     &set_env_var,  // builtin_command_func[5]: setenv
     &unset_env_var // builtin_command_func[6]: unsetenv
 };
+
+const char *builtin_desc[] = {
+    "cd directory_name to change working directory of the shell",
+    "help for supported commands",
+    "exit to terminate the shell gracefully",
+    "usage cd/help/exit",
+    "env to list all registered env variables",
+    "set env ENV=VALUE to set a new env variable",
+    "unsetenv ENV to remove this env from the list of env variables",
+};
