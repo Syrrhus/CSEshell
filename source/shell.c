@@ -26,7 +26,6 @@ int shell_cd(char **args)
       perror("shell");
     }
   }
-  printf("current:%s\n", getcwd(cwd, sizeof(cwd)));
   return 1;
 }
 int shell_help(char **args)
@@ -195,7 +194,7 @@ void type_prompt()
     first_time = 0;
   }
   fflush(stdout); // Flush the output buffer
-  printf("$$ ");  // Print the shell prompt
+  printf("\033[1;92m>> %s >> %s %s\033[0m\n$$ ", getcwd(cwd, sizeof(cwd)), __DATE__, __TIME__);  // Print the shell prompt
 }
 
 void process_rc_file() {
@@ -295,7 +294,6 @@ int main(void)
       {
 
         snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
-        printf("full path: %s\n", full_path);
         execvp(cmd[0], cmd);
 
         // If execv returns, command execution has failed
