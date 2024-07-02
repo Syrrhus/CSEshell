@@ -211,8 +211,6 @@ void process_rc_file() {
         // Remove newline character
         line[strcspn(line, "\n")] = 0;
 
-        printf("Processing line: %s\n", line); // Debug print
-
         if (strncmp(line, "PATH=", 5) == 0) {
             if (setenv("PATH", line + 5, 1) == -1) {
             perror("Failed to set PATH");
