@@ -83,6 +83,7 @@ Contains all the necessary source code for the shell and system programs. It is 
 ## Additional features
 - Decorate the prompt to include useful information like current path, date and time
 - added a shellpet to play with while idling in shell
+- -added resource usage sys program to check resource usage
 
 ## Sustainability
 lightweight system programs
