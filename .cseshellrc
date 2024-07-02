@@ -1,5 +1,4 @@
-PATH=/usr/bin
+PATH=/home/shojunxi/programming-assignment-1-2024-anyhow/bin:/usr/bin
 clear
 cal
-help
-usage
+echo help me

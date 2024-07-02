@@ -188,14 +188,12 @@ void process_rc_file() {
         printf("Processing line: %s\n", line); // Debug print
 
         if (strncmp(line, "PATH=", 5) == 0) {
-            // Set PATH environment variable
-            if (putenv(line) != 0) {
-                perror("Failed to set PATH");
+            if (setenv("PATH", line + 5, 1) == -1) {
+            perror("Failed to set PATH");
             }
-        } else {
+       } else {
             // Execute command
             if (fork() == 0) {
-            	printf("printprinthelphelp");
                 // Child process
                 char *args[] = {"/bin/sh", "-c", line, NULL};
                 execvp(args[0], args);
@@ -214,8 +212,8 @@ void process_rc_file() {
 // The main function where the shell's execution begins
 int main(void)
 {
-  process_rc_file();
   // Define an array to hold the command and its arguments
+  process_rc_file();
   char *cmd[MAX_ARGS];
   int child_status;
   // Formulate the full path of the command to be executed
@@ -269,14 +267,10 @@ int main(void)
     {
       if (getcwd(cwd, sizeof(cwd)) != NULL)
       {
+
         snprintf(full_path, sizeof(full_path), "%s/bin/%s", cwd, cmd[0]);
         printf("full path: %s\n", full_path);
-        execvp(full_path, cmd);
-        // if (execv(full_path, cmd) == -1)
-        // {
-        //   printf("%d", execv(full_path, cmd));
-        //   execvp(full_path, cmd);
-        // }
+        execvp(cmd[0], cmd);
 
         // If execv returns, command execution has failed
         printf("Command %s not found\n", cmd[0]);
