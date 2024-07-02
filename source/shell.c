@@ -92,11 +92,30 @@ int list_env(char **args)
 }
 
 int set_env_var(char **args)
-{
+{ 
+  if (args[1] == NULL) {
+    fprintf(stderr, "setenv: expected variable name\n");
+  } else if (args[2] == NULL) {
+    fprintf(stderr, "setenv: expected value for %s\n", args[1]);
+  } else {
+    printf("%s = %s\n", args[1], args[2]);
+    if (setenv(args[1], args[2], 1) != 0) {
+      perror("setenv");
+    } else {
+      printf("PATH set\n");
+    }
+  }
   return 1;
 }
 int unset_env_var(char **args)
 {
+  if (args[1] == NULL) {
+    fprintf(stderr, "unsetenv: expected argument\n");
+  } else {
+    if (unsetenv(args[1]) != 0) {
+      perror("unsetenv");
+    }
+  }
   return 1;
 }
 

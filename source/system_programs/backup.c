@@ -10,7 +10,7 @@ void main() {
         return;
     }
 
-    char *projectDir = getenv("PROJECT_DIR");
+    char *projectDir = "/home/shojunxi/programming-assignment-1-2024-anyhow";
     if (!projectDir) {
         printf("Error: PROJECT_DIR environment variable is not set.\n");
         return;
