@@ -42,6 +42,13 @@ int shell_exit(char **args)
   return 0;
 }
 
+int pwd(char **args)
+{
+  char cwd[1024];
+  getcwd(cwd, sizeof(cwd));
+  return 1;
+}
+
 void print_description(const char *function){
     //create for loop to input correct desc based on command input
     int found=0; //add this as a flag to see if command is found
