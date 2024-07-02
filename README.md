@@ -64,3 +64,29 @@ make clean
 ## Source Directory
 
 Contains all the necessary source code for the shell and system programs. It is divided into the shell implementation (`shell.c`, `shell.h`) and system programs (`system_programs/`).
+
+## Source Directory
+- `cd`: Allows the user to change the current working directory of the shell
+
+- `help`: Allows user to print out all the builtin commands in the shell
+
+- `usage`: Print a brief description on how to use each builtin command
+
+- `env`: Print all environment variables of this shell
+
+- `setenv`: The command setenv KEY=VALUE simply adds to the list of this process’ environment variables
+
+- `unsetenv`: This command unset KEY should delete any environment variable whose KEY matches any existing environmentnvariables.
+  
+- `exit`: quite the shell
+
+## Sustainability
+lightweight system programs
+- we focus on making our program simple and efficient and avoid fancy graphics so that it does not take up too many resources and ensure resources are reserved for the commands
+- we keep all commands and programs as simple as possible and with efficient algorithms
+  
+## Inclusivity
+Inclusive Error Messaging
+- we have detailed error messages that are informative and user-friendly
+- - we wrote in simple languages as well as provided technical terms to help users understand and fix issues 
+
