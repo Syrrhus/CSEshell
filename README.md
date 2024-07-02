@@ -82,15 +82,18 @@ Contains all the necessary source code for the shell and system programs. It is 
 
 ## Additional features
 - Decorate the prompt to include useful information like current path, date and time
+- added a shellpet to play with while idling in shell
 
 ## Sustainability
 lightweight system programs
 - we focus on making our program simple and efficient and avoid fancy graphics so that it does not take up too many resources and ensure resources are reserved for the commands
+- eg. for the dcheck, we output it to temporary text file and ensured the removal to free up disk space 
 - we keep all commands and programs as simple as possible and with efficient algorithms
 - we included a sys program resusage to show the resource usage to evaluate the impacts of the shell on the environment for the user
   
 ## Inclusivity
 Inclusive Error Messaging
 - we have detailed error messages that are informative and user-friendly
-- we wrote in simple languages as well as provided technical terms to help users understand and fix issues 
+- we wrote in simple languages as well as provided technical terms to help users understand and fix issues, using terms such as cmd, builtincommands, and even separated code for modular design for ease of reading in header files such as the code for builtindesc
+  - we applied a modular structure where we split functions such that it is readable and maintainable
 
