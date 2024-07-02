@@ -1,3 +1,5 @@
+PATH=/usr/bin
+clear
+cal
 help
 usage
-env

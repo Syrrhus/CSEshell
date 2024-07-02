@@ -111,7 +111,7 @@ void read_command(char **cmd)
 void type_prompt()
 {
   // Use a static variable to check if this is the first call to the function
-  static int first_time = 1;
+  static int first_time = 0;
   if (first_time)
   {
     // Clear the screen on the first call
@@ -149,6 +149,7 @@ void process_rc_file() {
         } else {
             // Execute command
             if (fork() == 0) {
+            	printf("printprinthelphelp");
                 // Child process
                 char *args[] = {"/bin/sh", "-c", line, NULL};
                 execvp(args[0], args);

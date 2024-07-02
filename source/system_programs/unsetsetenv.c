@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int unsetsetenv(char **args) {
+int main(char **args) {
   if (args[1] == NULL) {
     fprintf(stderr, "unsetenv: expected argument\n");
   } else {
