@@ -88,5 +88,5 @@ lightweight system programs
 ## Inclusivity
 Inclusive Error Messaging
 - we have detailed error messages that are informative and user-friendly
-- - we wrote in simple languages as well as provided technical terms to help users understand and fix issues 
+- we wrote in simple languages as well as provided technical terms to help users understand and fix issues 
 

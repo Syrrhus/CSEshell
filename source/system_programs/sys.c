@@ -8,6 +8,7 @@
 #include <time.h>
 #include <sys/sysinfo.h>
 #include <string.h>
+#include <errno.h>
 
 void get_uptime(char *uptime_str)
 {
@@ -35,11 +36,7 @@ void get_username_info()
 
     uid = geteuid();
     pw = getpwuid(uid);
-    if (pw)
-    {
-        printf("User: %s\n", pw->pw_name);
-    }
-    else
+    if (!pw)
     {
         perror("getpwuid");
         exit(EXIT_FAILURE);
@@ -79,13 +76,12 @@ void get_memory_info(char *mem_info)
 
     long total_ram = s_info.totalram / 1024 / 1024;
     long free_ram = s_info.freeram / 1024 / 1024;
-    sprintf(mem_info, "%ld MB / %ld MB", total_ram - free_ram, total_ram);
+    sprintf(mem_info, "%ld MB", total_ram - free_ram);
 }
 
 int main()
 {
     struct utsname unameData;
-    printf("Simple System Information\n");
     uname(&unameData);
 
     // Get the current user
@@ -111,10 +107,13 @@ int main()
     // Get memory info
     char mem_info[128];
     get_memory_info(mem_info);
-    printf("Hostname:\033[1;32m%s\033[0m@\033[1;32m%s\033[0m\n", pw->pw_name, unameData.nodename);
+
+    printf("\033[1;96mSimple System Information\033[0m\n");
     printf("OS: \033[1;34m%s\033[0m\n", unameData.sysname);
     printf("Kernel: \033[1;34m%s\033[0m\n", unameData.release);
+    printf("Hostname: \033[1;34m%s\033[0m\n", unameData.nodename);
     printf("Uptime: \033[1;34m%s\033[0m\n", uptime_str);
+    printf("User: \033[1;34m%s\033[0m\n", pw->pw_name);
     printf("CPU: \033[1;34m%s\033[0m\n", cpu_info);
     printf("Memory: \033[1;34m%s\033[0m\n", mem_info);
 
