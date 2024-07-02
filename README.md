@@ -80,6 +80,9 @@ Contains all the necessary source code for the shell and system programs. It is 
   
 - `exit`: quite the shell
 
+## Additional features
+- Decorate the prompt to include useful information like current path, date and time
+
 ## Sustainability
 lightweight system programs
 - we focus on making our program simple and efficient and avoid fancy graphics so that it does not take up too many resources and ensure resources are reserved for the commands
