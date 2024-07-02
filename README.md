@@ -87,6 +87,7 @@ Contains all the necessary source code for the shell and system programs. It is 
 lightweight system programs
 - we focus on making our program simple and efficient and avoid fancy graphics so that it does not take up too many resources and ensure resources are reserved for the commands
 - we keep all commands and programs as simple as possible and with efficient algorithms
+- we included a sys program resusage to show the resource usage to evaluate the impacts of the shell on the environment for the user
   
 ## Inclusivity
 Inclusive Error Messaging
